@@ -1,11 +1,31 @@
+
 .nav-bar {
   background: linear-gradient(90deg, #c6fff7, #367b80);
   padding: 1rem 2rem;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
   position: sticky;
   top: 0;
   z-index: 100;
+  animation: slideDownFadeIn 0.8s ease forwards;
+  transform-origin: top;
+  opacity: 0;
 }
+
+@keyframes slideDownFadeIn {
+  0% {
+    transform: translateY(-120%) scaleY(0.6);
+    opacity: 0;
+  }
+  60% {
+    transform: translateY(10%) scaleY(1.05);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(0) scaleY(1);
+    opacity: 1;
+  }
+}
+
 
 .nav-container {
   max-width: 1200px;
@@ -15,26 +35,37 @@
   justify-content: space-between;
 }
 
+
 .nav-logo {
   font-weight: 700;
-  font-size: 1.6rem;
+  font-size: 1.8rem;
   color: #fff;
   letter-spacing: 1.5px;
+  transition: transform 0.4s ease, color 0.3s ease;
+  cursor: pointer;
+}
+
+.nav-logo:hover {
+  transform: scale(1.15) rotate(5deg);
+  color: #cff7f1;
 }
 
 .nav-links a {
   color: #ddd;
   text-decoration: none;
-  margin-left: 2rem;
-  font-weight: 500;
-  font-size: 1.1rem;
+  margin-left: 2.5rem;
+  font-weight: 600;
+  font-size: 1.2rem;
   position: relative;
-  padding-bottom: 4px;
-  transition: color 0.3s ease;
+  padding-bottom: 6px;
+  transition: color 0.4s ease;
+  cursor: pointer;
+  user-select: none;
 }
 
 .nav-links a:hover {
   color: #fff;
+  transform: scale(1.1);
 }
 
 .active-link {
@@ -42,13 +73,27 @@
   font-weight: 700;
 }
 
+
 .active-link::after {
   content: '';
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 3px;
-  background-color: #fff;
-  border-radius: 3px;
+  height: 4px;
+  background: linear-gradient(90deg, #a0fff7, #00a8a8);
+  border-radius: 5px;
+  animation: slideLine 1s ease forwards;
+}
+
+
+@keyframes slideLine {
+  0% {
+    width: 0%;
+    opacity: 0.6;
+  }
+  100% {
+    width: 100%;
+    opacity: 1;
+  }
 }

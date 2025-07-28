@@ -8,7 +8,6 @@ export default function UserList() {
   const [searchTerm, setSearchTerm] = useState('');
   const [darkMode, setDarkMode] = useState(false);
 
-
   const fetchUsers = async () => {
     try {
       const response = await axios.get('https://randomuser.me/api/?results=12');
@@ -22,23 +21,19 @@ export default function UserList() {
     fetchUsers();
   }, []);
 
-  
   const handleLoadMore = () => {
-    fetchUsers(); // Fetch 12 new users and replace the current list
+    fetchUsers(); 
   };
 
- 
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
   };
-
 
   const filteredUsers = users.filter((user) =>
     (`${user.name.first} ${user.name.last}`)
       .toLowerCase()
       .includes(searchTerm.toLowerCase())
   );
-
 
   const toggleDarkMode = () => {
     setDarkMode(!darkMode);
@@ -48,12 +43,10 @@ export default function UserList() {
     <div className={`user-list-container ${darkMode ? 'dark' : ''}`}>
       <h1>InstaBoard</h1>
 
- 
       <button className="dark-mode-btn" onClick={toggleDarkMode}>
         {darkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
       </button>
 
-    
       <input
         type="text"
         placeholder="Search by name..."
@@ -62,19 +55,15 @@ export default function UserList() {
         className="search-input"
       />
 
-
       <div className="user-list">
         {filteredUsers.map((user, index) => (
           <UserCard
-            key={index}
-            picture={user.picture.medium}
-            name={`${user.name.first} ${user.name.last}`}
-            email={user.email}
+            key={user.login?.uuid || index}
+            user={user}
           />
         ))}
       </div>
 
-   
       <button className="load-more-btn" onClick={handleLoadMore}>
         Load More
       </button>

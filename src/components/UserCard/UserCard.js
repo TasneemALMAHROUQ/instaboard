@@ -1,27 +1,50 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import './UserCard.css';
 
-export default function UserCard({ picture, name, email }) {
-  const [likes, setLikes] = useState(0);
-  const [showEmail, setShowEmail] = useState(false);
+export default function UserCard({ user }) {
+  const [liked, setLiked] = useState(false);
 
-  const handleLike = () => {
-    setLikes(likes + 1);
-  };
+  useEffect(() => {
+    const likedUsers = JSON.parse(localStorage.getItem('likedUsers')) || [];
+    const isLiked = likedUsers.some(u => u.login?.uuid === user.login?.uuid);
+    setLiked(isLiked);
+  }, [user.login?.uuid]);
 
-  const toggleEmail = () => {
-    setShowEmail(!showEmail);
+  const toggleLike = () => {
+    const likedUsers = JSON.parse(localStorage.getItem('likedUsers')) || [];
+    if (liked) {
+      const newLikedUsers = likedUsers.filter(u => u.login?.uuid !== user.login?.uuid);
+      localStorage.setItem('likedUsers', JSON.stringify(newLikedUsers));
+      setLiked(false);
+    } else {
+      likedUsers.push(user);
+      localStorage.setItem('likedUsers', JSON.stringify(likedUsers));
+      setLiked(true);
+    }
   };
 
   return (
     <div className="user-card">
-      <img src={picture} alt={name} className="user-image" />
-      <h2>{name}</h2>
-      {showEmail && <p>{email}</p>}
-      <button onClick={toggleEmail}>
-        {showEmail ? 'Hide Email' : 'Show Email'}
+      <img
+        src={user.picture?.medium}
+        alt={`${user.name?.first} ${user.name?.last}`}
+        className="user-image"
+      />
+      <h2>{user.name?.first} {user.name?.last}</h2>
+
+      <button className={`like-btn ${liked ? 'liked' : ''}`} onClick={toggleLike}>
+        {liked ? '💔 Unlike' : '❤️ Like'}
       </button>
-      <button onClick={handleLike}>Like ({likes})</button>
+
+      <Link
+  to={`/team/${user.login?.uuid}`}
+  state={{ user }}
+  className="view-profile-btn"
+>
+  View Profile
+</Link>
+
     </div>
   );
 }
